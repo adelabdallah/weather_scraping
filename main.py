@@ -23,7 +23,7 @@ def days_of_the_week(day_number):
         4: 'Friday',
         5: 'Saturday',
         6: 'Sunday'
-    }[day_number if day_number <= 6 else day_number - 6]  # <--- I feel like this was clever, don't care watchu think
+    }[day_number if day_number <= 6 else day_number - 7]  # <--- I feel like this was clever, don't care watchu think
 
 
 for i in range(6):
