@@ -7,9 +7,11 @@ import datetime
 page = requests.get('https://weather.gc.ca/city/pages/on-143_metric_e.html')
 soup = BeautifulSoup(page.content, 'html.parser')
 
-daytimeForecastList = soup.find_all('span', class_='high wxo-metric-hide')
+daytimeHigh = soup.find_all('span', class_='high wxo-metric-hide')
+daytimeLow = soup.find_all('span', class_='low wxo-metric-hide')
 
-weatherData = list()
+weatherHighData = list()
+weatherLowData = list()
 
 datesData = list()
 
@@ -27,7 +29,8 @@ def days_of_the_week(day_number):
 
 
 for i in range(6):
-    weatherData.append(int(daytimeForecastList[i].contents[0].replace("°", "")))
+    weatherHighData.append(int(daytimeHigh[i].contents[0].replace("°", "")))
+    weatherLowData.append(int(daytimeLow[i].contents[0].replace("°", "")))
 
 
 for i in range(6):
@@ -35,12 +38,18 @@ for i in range(6):
 
     datesData.append(currentDate)
 
-y = np.array(weatherData)
+y_high = np.array(weatherHighData)
+y_low = np.array(weatherLowData)
 x = np.array([0, 1, 2, 3, 4, 5])
 pyplot.xticks(x, datesData)
 
-pyplot.plot(x, y)
+pyplot.gca().set_color_cycle(['red', 'blue'])
+pyplot.plot(x, y_high, marker='o')
+pyplot.plot(x, y_low, marker='o')
 pyplot.ylabel('Temperature (degrees Celsius)')
 pyplot.title('Temperature for the Coming Week in Toronto')
+pyplot.legend(['High', 'Low'], loc='upper center')
+pyplot.grid(linestyle='dashed')
+
 
 pyplot.show()
